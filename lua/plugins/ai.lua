@@ -152,30 +152,40 @@ return {
         enabled = true,
         cmd = "Copilot",
         build = ":Copilot auth",
-        event = "InsertEnter",
+        -- Remove automatic loading on InsertEnter
+        -- event = "InsertEnter",
+        
+        -- Add keymaps for manual control
+        keys = {
+            { "<leader>cp", "<cmd>Copilot toggle<cr>", desc = "Toggle Copilot" },
+            { "<leader>ce", "<cmd>Copilot enable<cr>", desc = "Enable Copilot" },
+            { "<leader>cd", "<cmd>Copilot disable<cr>", desc = "Disable Copilot" },
+        },
+        
         config = function()
             require("copilot").setup({
                 panel = {
                     enabled = true,
-                    auto_refresh = true,
+                    auto_refresh = false, -- Don't auto refresh
                     keymap = {
                         jump_next = "<c-j>",
                         jump_prev = "<c-k>",
-                        accept = "<c-a>",
+                        accept = "<Tab>",
                         refresh = "r",
                         open = "<M-CR>",
                     },
                     layout = {
-                        position = "bottom", -- | top | left | right
+                        position = "bottom",
                         ratio = 0.4,
                     },
                 },
                 suggestion = {
-                    enabled = true,
-                    auto_trigger = true,
+                    enabled = true, 
+                    auto_trigger = true, -- Enable auto-trigger
+                    hide_during_completion = true,
                     debounce = 75,
                     keymap = {
-                        accept = "<c-a>",
+                        accept = "<Tab>",
                         accept_word = false,
                         accept_line = false,
                         next = "<c-j>",
@@ -183,16 +193,26 @@ return {
                         dismiss = "<C-e>",
                     },
                 },
+                -- Remove the filetypes restriction
+                copilot_node_command = 'node', -- Node.js version must be > 18.x
+                server_opts_overrides = {},
+            })
+            
+            -- Ensure copilot starts disabled
+            vim.api.nvim_create_autocmd("VimEnter", {
+                callback = function()
+                    vim.cmd('Copilot disable')
+                end,
             })
         end,
     },
     {
         "CopilotC-Nvim/CopilotChat.nvim",
         dependencies = {
-            { "github/copilot.vim" },                       -- or zbirenbaum/copilot.lua
-            { "nvim-lua/plenary.nvim", branch = "master" }, -- for curl, log and async functions
+            { "zbirenbaum/copilot.lua" }, -- Use copilot.lua instead of copilot.vim
+            { "nvim-lua/plenary.nvim", branch = "master" },
         },
-        build = "make tiktoken",                            -- Only on MacOS or Linux
+        build = "make tiktoken",
         opts = {
             -- See Configuration section for options
         },
