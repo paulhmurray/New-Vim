@@ -21,10 +21,34 @@ require('orgmode').setup({
       target = '~/org/notes.org'
     },
         m = {
-        description = 'Meeting',
-        template = '* Meeting: %^{Meeting Title}\n  %u\n  %a\n  ** Attendees: %^{Attendees}\n  ** Agenda: %^{Agenda}\n  ** Notes:\n- %? Action Items:\n  - [ ] ',
-        target = '~/org/meetings.org'
-  }},
-})
+          description = 'Meeting',
+          template = [[
+
+** Meeting: %^{Meeting Title} :meeting:
+:PROPERTIES:
+:DATE: %u
+:ATTENDEES: %^{Attendees}
+:END:
+*** Agenda:
+%^{Agenda}
+*** Notes:
+- %?
+*** Action Items:
+**** TODO
+
+
+          ]],
+        target = '~/org/meetings.org',
+        headline = 'Meetings',
+        },
+        j = {
+          description = 'Journal',
+          template = '* %<%H:%M>\n %?\nEntered on %U\n',
+          target = '~/org/journal.org',
+            headline = '2025',
+            datetree = true,
+        }
+      },
+    })
   end,
 }

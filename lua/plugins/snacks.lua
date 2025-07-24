@@ -66,7 +66,7 @@ return {
     },
     -- find
     {
-      "<leader>o",
+      "<leader>b",
       function()
         Snacks.picker.buffers({
           win = {
